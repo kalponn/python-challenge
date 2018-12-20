@@ -54,7 +54,9 @@ with open(csvpath, newline="") as csvfile:
 	print("Total Votes: " + str(totalvotes))
 	print("------------------------------------------------")
 	for values in totalcandidatevotes:
-		print(values[0] + " : " + str(values[1]) + "%" + " (" + str(values[2]) + ")")
+		pollcandidates = {"name": values[0] ,  "voteperc": values[1] ,"votesrecv": values[2]}
+		print(values[0] + " :  " + str(values[1]) + "%" + " (" + str(values[2]) + ")")
+
 	print("------------------------------------------------")
 	print("winner: " + winner)
 	print("------------------------------------------------")
@@ -68,8 +70,16 @@ with open(outfile, 'w') as file:
 	file.write("------------------------------------------------"+ "\n")
 	file.write("Total Votes: " + str(totalvotes)+ "\n")
 	file.write("------------------------------------------------"+ "\n")
-	for values in totalcandidatevotes:
-		file.write(values[0] + " : " + str(values[1]) + "%" + " (" + str(values[2]) + ")"+ "\n")
+	j = 0
+	for j in range(len(candidates)):
+		file.write(candidates[j] + " : " + str(votespercent[j]) + "%" + " (" + str(votesforcandidate[j]) + ")"+ "\n")
+
+	#for value in totalcandidatevotes:
+	#	file.write(value[0] + " : " + str(value[1]) + "%" + " (" + str(value[2]) + ")"+ "\n")
+
+	#for pollcandidate in pollcandidates:
+	#	file.write(pollcandidate['name] + " " +  str(pollcandidate[voteperc]) + "%" + " (" + str(pollcandidate[votesrecv]) + ")"+ "\n")
+	
 	file.write("------------------------------------------------"+ "\n")
 	file.write("winner: " + winner + "\n")
 	file.write("------------------------------------------------"+ "\n")
