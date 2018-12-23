@@ -18,33 +18,36 @@ totalamt = 0
 with open(csvpath, newline="") as csvfile:
 	csvreader = csv.reader(csvfile, delimiter=",")
 	linecount = 0
-	
-    
+
+# Read the header row first
+	csv_header = next(csvfile)	
+
+	currentamt = 0
+	lastamtchange = 0
+	curramtchange = 0
+	maxincreasemonth = ''
+	maxincreaseamt = 0
+	maxdecreasemonth = ''
+	maxdecreaseamt = 0  
+	lastamt = 0 
+	changeinbalance = [] 
+
 # Loop through the file and  determine total amt , max increase , decrease .
 	for row in csvreader:
+		currentamt = int(row[1])
+		totalmonths = totalmonths + 1
+		totalamt = totalamt + currentamt
+		curramtchange = currentamt - lastamt
 		if linecount == 0:
-			currentamt = 0
-			lastamtchange = 0
-			curramtchange = 0
-			maxincreasemonth = ''
-			maxincreaseamt = 0
-			maxdecreasemonth = ''
-			maxdecreaseamt = 0
-		
-		else:
-			currentamt = int(row[1])
-			totalmonths = totalmonths + 1
-			totalamt = totalamt + currentamt
-			curramtchange = currentamt - lastamt
-			if linecount == 1:
 				#store first row amt
 				firstrowamt = currentamt
-			else:
-				if curramtchange > maxincreaseamt:
+		else:
+			changeinbalance.append(curramtchange)
+			if curramtchange > maxincreaseamt:
 					maxincreaseamt = curramtchange 
 					maxincreasemonth = (row[0])
 				
-				if curramtchange < maxdecreaseamt:
+			if curramtchange < maxdecreaseamt:
 					maxdecreaseamt = curramtchange
 					maxdecreasemonth = (row[0])
 			
@@ -53,11 +56,15 @@ with open(csvpath, newline="") as csvfile:
 
 	#store the last row amt
 	lastrowamt = currentamt
+	
 
 	#calculate average change
-	averagechange = round((lastrowamt - firstrowamt ) / (totalmonths - 1),2)
+	#averagechange = round((lastrowamt - firstrowamt ) / (totalmonths - 1),2)
+	averagechange = round( sum(changeinbalance)/len(changeinbalance),2) 
 
 	#print the values to terminal
+	print("lendgth of list" + str( len(changeinbalance)))
+	print("sum of list" + str( sum(changeinbalance)))
 	print("Total Months: " + str(totalmonths))
 	print("Total: " +"$"+ str(totalamt))
 	print("Average Change: " +"$"+ str(averagechange))
